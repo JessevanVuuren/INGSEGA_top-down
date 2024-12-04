@@ -7,11 +7,12 @@ public class HealthBar : MonoBehaviour
     public Color low;
     public Color high;
     public Vector3 offset;
+    public bool isPlayer = false;
 
 
     public void SetHealth(float health, float maxHealth)
     {
-        slider.gameObject.SetActive(health < maxHealth);
+        if (!isPlayer) slider.gameObject.SetActive(health < maxHealth);
         slider.value = health;
         slider.maxValue = maxHealth;
         
@@ -20,6 +21,6 @@ public class HealthBar : MonoBehaviour
 
     void Update()
     {
-        slider.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position + offset);
+        if (!isPlayer) slider.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position + offset);
     }
 }

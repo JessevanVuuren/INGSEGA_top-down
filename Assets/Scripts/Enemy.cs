@@ -6,9 +6,11 @@ public class Enemy : MonoBehaviour
 
     public GameObject target;
     NavMeshAgent agent;
-    public int hp;
+    private int hp;
     public int maxHealth = 100;
     public int rotateSprite = 90;
+
+    public int lookDistance = 10;
 
     public HealthBar healthBar;
 
@@ -28,11 +30,16 @@ public class Enemy : MonoBehaviour
     {
         if (target != null)
         {
-            agent.SetDestination(target.transform.position);
+            float dist = Vector3.Distance(transform.position, target.transform.position);
 
-            Vector3 direction = target.transform.position - transform.position;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle - rotateSprite);
+            if (dist < lookDistance)
+            {
+                agent.SetDestination(target.transform.position);
+
+                Vector3 direction = target.transform.position - transform.position;
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.Euler(0, 0, angle - rotateSprite);
+            }
 
         }
         else
@@ -40,6 +47,11 @@ public class Enemy : MonoBehaviour
             target = GameObject.Find("Player");
         }
 
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, lookDistance);
     }
 
     public void TakeDMG()
