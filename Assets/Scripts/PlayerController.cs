@@ -1,5 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -21,9 +22,14 @@ public class PlayerController : MonoBehaviour
     public GameObject gunMinigun;
     public int activeWeapon = 0;
 
+    public TextMeshProUGUI text;
+    private int startAmount;
+    public int enemyAmount;
+
     private Vector2 movement; // Stores the direction of player movement
 
-    public void SetWeapon(int active) {
+    public void SetWeapon(int active)
+    {
         gunPistol.SetActive(active == 0);
         gunRifle.SetActive(active == 1);
         gunMinigun.SetActive(active == 2);
@@ -33,6 +39,10 @@ public class PlayerController : MonoBehaviour
     {
         SetWeapon(activeWeapon);
 
+        enemyAmount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        startAmount = enemyAmount;
+        text.SetText(enemyAmount + "/" + enemyAmount);
+
         hp = maxHP;
         healthBar.SetHealth(hp, maxHP);
     }
@@ -40,6 +50,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        enemyAmount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        text.SetText(enemyAmount + "/" + startAmount);
+
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
@@ -49,11 +62,12 @@ public class PlayerController : MonoBehaviour
         else if (vertical < 0) animator.Play("WalkForward");
         else animator.Play("IDLE");
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f) {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+        {
             activeWeapon++;
             activeWeapon %= 3;
             SetWeapon(activeWeapon);
-        } 
+        }
 
         movement = new Vector2(horizontal, vertical);
     }
@@ -69,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D collision)
     {
-        
+
         if (collision.gameObject.CompareTag("Enemy") && Time.time > currentTime)
         {
             currentTime = Time.time + timeBetweenDmg;
@@ -78,7 +92,7 @@ public class PlayerController : MonoBehaviour
 
         if (hp <= 0)
         {
-            Destroy(gameObject);
+            SceneManager.LoadScene(0);
         }
 
         healthBar.SetHealth(hp, maxHP);

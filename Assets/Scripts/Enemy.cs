@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     private int hp;
     public int maxHealth = 100;
     public int rotateSprite = 90;
+    public bool showLookDist = false;
 
     public int lookDistance = 10;
 
@@ -51,7 +52,7 @@ public class Enemy : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, lookDistance);
+        if (showLookDist) Gizmos.DrawWireSphere(transform.position, lookDistance);
     }
 
     public void TakeDMG()

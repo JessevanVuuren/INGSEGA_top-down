@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ded199bff36393c4c82d6df1d8442e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 40
+  amount: 20
   floatAmplitude: 0.08
   floatSpeed: 2.83
   weaponName: rifle_gun
